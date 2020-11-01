@@ -1,0 +1,66 @@
+#pragma once
+#import <iostream>
+#import <list>
+#import <any>
+#import <variant>
+#import <type_traits>
+#import <math.h>
+#import <vector>
+#define GLFW_INCLUDE_VULKAN
+#import <GLFW/glfw3.h>
+#import <functional>
+#import <thread>
+#import <unordered_map>
+#import <algorithm>
+#import <map>
+#import <fstream>
+#import <array>
+#import <set>
+#import <deque>
+#import <optional>
+#import <glm/vec4.hpp>
+#import <glm/mat4x4.hpp>
+#import <glm/vec2.hpp>
+#import <glm/vec3.hpp>
+#import <glm/gtc/matrix_transform.hpp>
+#import <vulkan/vulkan_core.h>
+#import <chrono>
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
+#import <glm/glm.hpp>
+#import <stdint.h>
+#import <assert.h>
+#import <stdlib.h>
+#import <math.h>
+#import <stdbool.h>
+#import <memory.h>
+#import <float.h>
+#import <time.h>
+//#include <freetype2/ft2build.h>
+//#include <freetype2/freetype/freetype.h>
+//#include <freetype2/freetype/ftbbox.h>
+//#include <freetype2/freetype/ftoutln.h>
+#include <thread>
+
+//#import <cpprest/streams.h>
+//#import <cpprest/containerstream.h>
+//#import <cpprest/filestream.h>
+//#import <cpprest/http_client.h>
+//#import <cpprest/uri.h>
+//#import <cpprest/json.h>
+
+
+
+
+//#define GLFW_INCLUDE_VULKAN
+//#include <GLFW/glfw3.h>
+//#define GLM_FORCE_RADIANS
+//#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+//#include <glm/vec4.hpp>
+//#include <glm/mat4x4.hpp>
+using namespace std;
+using namespace std::chrono;
+
+
+
+
