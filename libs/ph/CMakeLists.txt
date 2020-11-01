@@ -1,20 +1,10 @@
 
 cmake_minimum_required(VERSION 3.18.4)
-add_subdirectory(cmake/cmake_functions)
 myname(${CMAKE_CURRENT_LIST_DIR} name)
 project(${name} VERSION 1.0)
 
 # CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY
 
-macro(find_package NAME)
-    if(NOT "${NAME}" MATCHES "^boost_.*$" AND NOT "${NAME}" STREQUAL BCM)
-        _find_package(${ARGV})
-    else()
-        set(${ARGV0}_FOUND ON CACHE BOOL "")
-    endif()
-endmacro()
-
-include(cmake/bcm/share/bcm/cmake/BCMConfig.cmake)
 
 
 

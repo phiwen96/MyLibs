@@ -7,21 +7,13 @@ get_filename_component(foldername ${CMAKE_CURRENT_LIST_DIR} NAME)
 string(REPLACE " " "_" foldername ${foldername})
 project(${foldername})
 
-
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  find_package(ph REQUIRED)
+endif()
 
 
 file(GLOB SOURCES src/*.cpp src/pch.pch src/qml.qrc)
-file(GLOB HEADERS include/xcards/*.hpp)
+file(GLOB HEADERS include/${PROJECT_NAME}/*.hpp)
 
 # find_package(ph REQUIRED)
 
@@ -33,13 +25,11 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 
 target_compile_definitions(${PROJECT_NAME}
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-
-
-
 
 
 
@@ -55,8 +45,6 @@ target_link_libraries(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} 
     PRIVATE 
-    # $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    # $<INSTALL_INTERFACE:include>
     nlohmann_json::nlohmann_json
     ph::networking
     include
