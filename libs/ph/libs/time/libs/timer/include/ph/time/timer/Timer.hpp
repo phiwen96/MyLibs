@@ -1,6 +1,6 @@
 #pragma once
-#import <iostream>
-#import <chrono>
+#include <iostream>
+#include <chrono>
 using namespace std;
 using namespace std::chrono;
 namespace ph::time{
