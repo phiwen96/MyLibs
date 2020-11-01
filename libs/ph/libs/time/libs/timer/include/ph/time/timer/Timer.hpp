@@ -3,7 +3,7 @@
 #import <chrono>
 using namespace std;
 using namespace std::chrono;
-namespace ph::Time{
+namespace ph::time{
 class Timer {
 public:
       

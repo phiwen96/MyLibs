@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.18.4)
 add_subdirectory(cmake/cmake_functions)
 myname(${CMAKE_CURRENT_LIST_DIR} name)
-project(${name})
+project(${name} VERSION 1.0)
 
 # CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY
 
