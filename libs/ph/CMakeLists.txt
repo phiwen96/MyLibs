@@ -5,7 +5,7 @@ project(${name} VERSION 1.0)
 
 # CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY
 
-
+add_subdirectory(testing)
 
 
 file(GLOB_RECURSE LIBS libs/*CMakeLists.txt)

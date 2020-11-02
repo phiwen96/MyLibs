@@ -1,13 +1,13 @@
-#pragma once
+// #pragma once
 
-class Pill;
+// class Pill;
 
 
-class Product
-{
-public:
+// class Product
+// {
+// public:
       
-private:
-      Pill* m_pill;
+// private:
+//       Pill* m_pill;
       
-};
+// };

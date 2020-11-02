@@ -1,8 +1,8 @@
-#pragma once
+// #pragma once
 
 
-class Pill
-{
-public:
+// class Pill
+// {
+// public:
       
-};
+// };

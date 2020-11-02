@@ -1,13 +1,12 @@
 #include <test/main.hpp>
 #include <ph/metaprogramming/metaprogramming.hpp>
-#include <ph/metaprogramming/test.hpp>
 using namespace ph::metaprogramming;
 
 int main(int argc, char** argv)
 {
-       
-      Testing t;
-      t.run();
+       constexpr size_t s = Size<tuple<int, float, void>>::value;
+       cout << s << endl;
+      vector<int> i = {1,2,3,4};
       
       
       

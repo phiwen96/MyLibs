@@ -28,7 +28,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 
-link(${PROJECT_NAME})
+# link(${PROJECT_NAME})
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.pch)
 
@@ -79,11 +79,11 @@ if (DOXYGEN_FOUND)
     message("Doxygen build started")
 
     # note the option ALL which allows to build the docs together with the application
-    add_custom_target( doc_doxygen ALL
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
-        VERBATIM )
+    # add_custom_target( doc_doxygen ALL
+    #     COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+    #     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    #     COMMENT "Generating API documentation with Doxygen"
+    #     VERBATIM )
 else (DOXYGEN_FOUND)
   message("Doxygen need to be installed to generate the doxygen documentation")
 endif (DOXYGEN_FOUND)

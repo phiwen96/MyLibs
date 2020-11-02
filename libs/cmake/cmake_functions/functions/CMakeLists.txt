@@ -79,6 +79,8 @@ function(link target)
     link_vulkan(${target})
     link_glfw(${target})
     link_glm(${target})
+    target_link_libraries(${target} PRIVATE ph::testing)
+    target_include_directories(${target} PRIVATE ph::testing)
 endfunction(link target)
 
 
