@@ -87,3 +87,9 @@ if (DOXYGEN_FOUND)
 else (DOXYGEN_FOUND)
   message("Doxygen need to be installed to generate the doxygen documentation")
 endif (DOXYGEN_FOUND)
+
+
+
+
+
+# #INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/include/ph/metaprogramming/ @CMAKE_CURRENT_SOURCE_
