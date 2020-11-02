@@ -22,6 +22,7 @@ struct Size<List<Elements...>> : std::integral_constant<size_t, sizeof...(Elemen
 
 
 
+
 ////////////////////////////////////////////////////////////////
 /// @brief add an element to an existing type container
 ////////////////////////////////////////////////////////////////
@@ -97,6 +98,51 @@ struct concat<First<FirstElements...>, Second<SecondElements...>>
 {
       using type = First<FirstElements..., SecondElements...>;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

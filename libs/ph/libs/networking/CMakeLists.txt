@@ -23,10 +23,17 @@ add_library(${PROJECT_NAME}
   ${HEADERS}
 )
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+find_package(nlohmann_json 3.2.0 REQUIRED)
 
-link(${PROJECT_NAME})
+
+
+
+
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_include_directories(${PROJECT_NAME} PRIVATE include nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
+
+# link(${PROJECT_NAME})
 
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.pch)

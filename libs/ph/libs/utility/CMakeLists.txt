@@ -13,24 +13,45 @@ option(USE_VULKAN "use vulkan graphics library" OFF)
 option(USE_GLFW "use glfw library" OFF)
 option(USE_GLM "use glm library" OFF)
 
+if(USE_NLOHMANN)
+  find_package(nlohmann_json 3.2.0 REQUIRED)
+  list(APPEND EXTRA_LIBS nlohmann_json::nlohmann_json)
+  list(APPEND EXTRA_INCLUDES nlohmann_json::nlohmann_json)
+endif()
 
-file(GLOB SOURCES src/*.cpp)
-file(GLOB HEADERS include/ph/utility/*.hpp src/pch.pch)
 
+
+
+file(GLOB 
+  SOURCES 
+  src/*.cpp 
+)
+file(GLOB 
+  HEADERS 
+  include/ph/utility/*.hpp
+  src/pch.pch
+)
 add_library(${PROJECT_NAME}
   SHARED
   ${SOURCES}
   ${HEADERS}
 )
+target_compile_features(${PROJECT_NAME} 
+  PRIVATE 
+  cxx_std_17
+)
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-# target_link_libraries(${PROJECT_NAME} PUBLIC ph::time::date ph::time::timer)
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+find_package(nlohmann_json 3.2.0 REQUIRED)
 
 
-link(${PROJECT_NAME})
 
+target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
+target_include_directories(${PROJECT_NAME} PRIVATE include nlohmann_json::nlohmann_json)
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.pch)
+
+# link(${PROJECT_NAME})
+
+
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY EXPORT_NAME ${name})
 bcm_deploy(TARGETS ${PROJECT_NAME} INCLUDE include NAMESPACE ph::)

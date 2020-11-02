@@ -24,11 +24,11 @@ add_library(${PROJECT_NAME}
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-# target_link_libraries(${PROJECT_NAME} PRIVATE ph::ph)
+# target_link_libraries(${PROJECT_NAME} PUBLIC ph::time::date ph::time::timer)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 
-# link(${PROJECT_NAME})
+link(${PROJECT_NAME})
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.pch)
 

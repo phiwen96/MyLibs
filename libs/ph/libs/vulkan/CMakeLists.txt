@@ -24,10 +24,25 @@ add_library(${PROJECT_NAME}
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+find_package(Vulkan REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(glm REQUIRED)
+
+target_include_directories(${PROJECT_NAME} 
+  PRIVATE 
+  include
+  Vulkan::Vulkan
+  glfw
+  glm::glm
+)
+target_link_libraries(${PROJECT_NAME} 
+  PRIVATE 
+  Vulkan::Vulkan
+  glfw
+)
 
 
-link(${PROJECT_NAME})
+# link(${PROJECT_NAME})
 
 
 
