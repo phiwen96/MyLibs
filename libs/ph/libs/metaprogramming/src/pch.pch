@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 #import <iostream>
 #import <vector>
 #import <string>
@@ -6,3 +6,4 @@
 #import <utility>
 #import <type_traits>
 using namespace std;
+
