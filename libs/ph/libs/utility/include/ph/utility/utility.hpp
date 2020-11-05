@@ -38,9 +38,11 @@ std::ostream& operator<< (std::ostream& os, const std::tuple<T...>& t)
 template<typename... U>
 std::ostream& operator << (std::ostream& os, const std::vector<U...>& v)
 {
+      os << "{ ";
       for(auto i = v.begin(); i != v.end(); ++i){
-            os << "\t" << (*i) << std::endl;
+            os << (*i) << " ";
       }
+      os << "}";
 //      throw std::runtime_error ("not defined");
       return os;
 }

@@ -55,6 +55,8 @@ target_link_libraries(${PROJECT_NAME}
     ph::time
     ph::authentication
     ph::utility
+    ph::algorithms
+    ph::metaprogramming
 )
 link(${PROJECT_NAME})
 
