@@ -34,10 +34,10 @@ auto read<std::string> (const char* file) -> std::string {
       return text;
 }
 
-template <>
-auto read<nlohmann::json> (const char* file) -> nlohmann::json {
-      return nlohmann::json::parse(read<std::string>(file));
-}
+// template <>
+// auto read<nlohmann::json> (const char* file) -> nlohmann::json {
+//       return nlohmann::json::parse(read<std::string>(file));
+// }
 
 //      template <>
 //      auto read<nlohmann::json> (const char* file) -> nlohmann::json {
@@ -64,11 +64,11 @@ auto write (const char* file, const char*& from) -> void {
       f.close();
 }
 
-template <>
-auto write (const char* file, const nlohmann::json& from) -> void {
-      std::lock_guard<std::mutex> lock (mtx);
-      ph::utility::file::write(file, from.dump());
-}
+// template <>
+// auto write (const char* file, const nlohmann::json& from) -> void {
+//       std::lock_guard<std::mutex> lock (mtx);
+//       ph::utility::file::write(file, from.dump());
+// }
 
 
 }

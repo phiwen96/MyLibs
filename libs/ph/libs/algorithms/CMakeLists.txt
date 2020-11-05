@@ -24,8 +24,10 @@ add_library(${PROJECT_NAME}
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-find_package(ph_utility REQUIRED)
+# find_package(ph_core REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC ph::core)
 target_link_libraries(${PROJECT_NAME} PUBLIC ph::utility)
+# target_link_libraries(${PROJECT_NAME} PUBLIC ph::utility)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 

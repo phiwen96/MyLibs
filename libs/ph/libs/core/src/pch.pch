@@ -1,0 +1,23 @@
+#pragma once
+#import <iostream>
+#import <vector>
+#import <string>
+#import <tuple>
+#import <utility>
+#import <type_traits>
+#import <variant>
+#include <functional>
+#import <iostream>
+#import <fstream>
+#import <string>
+#import <sstream>
+#import <utility>
+#import <tuple>
+#import <mutex>
+#import <vector>
+#import <string.h>
+
+
+
+using namespace std;
+

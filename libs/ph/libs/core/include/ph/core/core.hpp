@@ -1,31 +1,6 @@
 #pragma once
-// #include <nlohmann/json.hpp>
-
-
-
-
-
-namespace ph::utility::file{
-// using namespace std;
-
-extern std::mutex mtx;
-
-
-template <typename To>
-auto read (const char* file) -> To {
-      throw std::runtime_error("not defined");
-}
-
-
-template <typename From>
-auto write (const char* file, From from) -> void {
-      throw std::runtime_error("not defined");
-}
-
-}
-
-
-namespace ph::utility {
+namespace ph::core
+{
 
 template <typename... T>
 std::ostream& operator<< (std::ostream& os, const std::tuple<T...>& t)
@@ -43,7 +18,7 @@ std::ostream& operator << (std::ostream& os, const std::vector<U...>& v)
             os << (*i) << " ";
       }
       os << "}";
-//      throw std::runtime_error ("not defined");
+      //      throw std::runtime_error ("not defined");
       return os;
 }
 
@@ -59,8 +34,6 @@ template <typename T>
 auto from_int (int i) -> T {
       throw std::runtime_error("not defined");
 }
-
-
 
 
 }
