@@ -3,6 +3,18 @@ namespace ph::metaprogramming
 {
 
 
+////////////////////////////////////////////////////////////////
+/// @brief Print a tuple
+////////////////////////////////////////////////////////////////
+template <class... A>
+ostream& operator<< (ostream& os, const tuple<A...>& t)
+{
+      os << "{ ";
+      apply([&os](const auto&... i){((os << i << " "), ...);}, t);
+      os << "}";
+      return os;
+}
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -100,15 +112,138 @@ struct concat<First<FirstElements...>, Second<SecondElements...>>
 };
 
 
+////////////////////////////////////////////////////////////////
+/// @brief takes a function and creates a tuple with params
+////////////////////////////////////////////////////////////////
+template <class F>
+struct make_tuple_of_params;
+
+template <class Fun, class... Params>
+struct make_tuple_of_params<Fun (Params...)>
+{
+      using params = std::tuple<Params...>;
+      using return_type = std::result_of<Fun(Params...)>;
+//      using returns = std::tuple
+};
+
+
+
+////////////////////////////////////////////////////////////////
+/// @brief create a tuple with N elements of type T
+////////////////////////////////////////////////////////////////
+template <typename T, size_t N>
+class make_tuple_of_n {
+      template <typename = std::make_index_sequence<N>>
+      struct impl;
+      
+      template <size_t... Is>
+      struct impl<std::index_sequence<Is...>> {
+            template <size_t >
+            using wrap = T;
+            
+            using type = std::tuple<wrap<Is>...>;
+      };
+      
+public:
+      using type = typename impl<>::type;
+};
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+/// @brief string =
+///           dispatch_params (string (int, int),
+///                            {1, 2});
+////////////////////////////////////////////////////////////////
+template <class Function,
+          class... Params,
+          std::size_t... I>
+decltype(auto) dispatch_params (Function function,
+                      const std::tuple<Params...>& params,
+                      std::index_sequence<I...>)
+{
+      return function(get<I>(params)...);
+}
+
+
+
+template <class Function,
+          class... Args,
+          class... Params>
+decltype(auto) dispatch_params (Function function (Args...),
+                      const std::tuple<Params...>& params)
+{
+      static_assert(is_same<tuple<Args...>, tuple<Params...>>::value,
+                    "wrong parameters");
+      
+      return dispatch_params(function,
+                             params,
+                             make_index_sequence<sizeof...(Params)>());
+}
 
 
 
 
 
 
+////////////////////////////////////////////////////////////////
+/// @brief {"hej", "ok", "ja"} =
+///           dispatch_paramtuples (string (int, int),
+///                                 {{1, 2}, {3, 4}, {4, 5}});
+///
+/// @param function to call for every
+////////////////////////////////////////////////////////////////
+template <class Function,
+          class... ParamsTuple,
+          size_t... paramsTupleCount>
+decltype(auto) dispatch_paramtuples (Function function,
+                                     const tuple<ParamsTuple...>& paramsTuples,
+                                     index_sequence<paramsTupleCount...>)
+{
+      return make_tuple(
+                        dispatch_params(
+                                        function,
+                                        get<paramsTupleCount>(paramsTuples))...);
+}
 
 
+template <class Function,
+          template<class...> class ParamsTuple,
+          class... ParamsTuples>
+decltype(auto) dispatch_paramtuples (Function function,
+                     const ParamsTuple<ParamsTuples...>& paramsTuples)
+{
+      return dispatch_paramtuples(function,
+                                  paramsTuples,
+                                  make_index_sequence<sizeof...(ParamsTuples)>());
+}
 
+
+template <class Function, Function func>
+struct execute
+{
+//      using paramsTuples = typename make_tuple_of_n<typename make_tuple_of_params<Function>::params, N>::type;// paramsTuple;
+      
+      template <size_t Q>
+      using paramsTuple = typename make_tuple_of_n<typename make_tuple_of_params<Function>::params, Q>::type;// paramsTuple;
+      
+      
+      template <template<class...> class ParamsTuple,
+                class... ParamsTuples>
+      auto operator() (Function function, const ParamsTuple<ParamsTuples...>& paramsTuples)
+      {
+            return dispatch_paramtuples (function, paramsTuples);
+      }
+      
+//      template <template<class...> class ParamsTuple,
+//      class... ParamsTuples>
+      auto operator() (const paramsTuples& paramsTuples)
+      {
+            return dispatch_paramtuples (func, paramsTuples);
+      }
+};
 
 
 

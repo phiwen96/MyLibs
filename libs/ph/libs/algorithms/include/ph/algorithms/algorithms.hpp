@@ -35,6 +35,23 @@ void insertion_sort (List<E, Elements...>& A, CompFunc compFunc )
       }
 }
 
+template <template <class...> class List, class... Elements, class CompFunc>
+void selection_sort (List<Elements...>& A, CompFunc compFunc)
+{
+      for (int j = 0; j < A.size() - 1; ++j)
+      {
+            auto key = A [j];
+            
+            for (int i = j + 1; i < A.size(); ++i)
+            {
+                  if ( auto candidate = A [i]; compFunc (candidate, key) ) {
+                        A [i] = key;
+                        key = candidate;
+                  }
+            }
+            A [j] = key;
+      }
+}
 
 
 
