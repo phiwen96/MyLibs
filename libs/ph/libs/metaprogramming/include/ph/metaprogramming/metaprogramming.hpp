@@ -111,6 +111,14 @@ struct concat<First<FirstElements...>, Second<SecondElements...>>
       using type = First<FirstElements..., SecondElements...>;
 };
 
+template<class F>
+struct S;
+
+template <class Fun, class... Params>
+struct S<Fun (Params...)>
+{
+      using s = decltype(declval<Fun>());
+};
 
 ////////////////////////////////////////////////////////////////
 /// @brief takes a function and creates a tuple with params
@@ -122,9 +130,27 @@ template <class Fun, class... Params>
 struct make_tuple_of_params<Fun (Params...)>
 {
       using params = std::tuple<Params...>;
-      using return_type = std::result_of<Fun(Params...)>;
+      using ret = decltype(declval<Fun(Params...)>());
+//      using ret = typename std::invoke_result_t<Fun, Params...>;
+//      using ret =  std::invoke_result<Fun, Params...>;
+//      using r = typename std::invoke_result<Fun, Params...>::type;
+//      static constexpr std::invoke_result_t<Fun, Params...> s;
+//      using r = typename ret::type;
 //      using returns = std::tuple
 };
+
+template <class F>
+struct make_tuple_of_returns;
+
+template <class Fun, class... Params>
+struct make_tuple_of_returns<Fun (Params...)>
+{
+      using params = std::tuple<Params...>;
+      using ret = std::result_of<Fun(Params...)>;
+//      using r = decltype(Fun(Params...));
+      //      using returns = std::tuple
+};
+
 
 
 
@@ -221,25 +247,83 @@ decltype(auto) dispatch_paramtuples (Function function,
 }
 
 
+
+
+
 template <class Function, Function func>
-struct execute
+struct function
 {
-//      using paramsTuples = typename make_tuple_of_n<typename make_tuple_of_params<Function>::params, N>::type;// paramsTuple;
+      typedef integral_constant<Function, func> m_func;
       
       template <size_t Q>
-      using paramsTuple = typename make_tuple_of_n<typename make_tuple_of_params<Function>::params, Q>::type;// paramsTuple;
+      using params = typename make_tuple_of_n<typename make_tuple_of_params<Function>::params, Q>::type;// paramsTuple;
       
+      template <size_t Q>
+      using returns = typename make_tuple_of_n<typename make_tuple_of_params<Function>::ret, Q>::type;
       
       template <template<class...> class ParamsTuple,
                 class... ParamsTuples>
-      auto operator() (Function function, const ParamsTuple<ParamsTuples...>& paramsTuples)
+      auto operator() (const ParamsTuple<ParamsTuples...>& paramsTuples)
       {
-            return dispatch_paramtuples (function, paramsTuples);
+            return dispatch_paramtuples (func, paramsTuples);
       }
+};
+
+
+
+template<class T>
+struct Y;
+
+template <class Ret, class... Args>
+struct Y<Ret(Args...)>
+{
+//      typedef Ret(*_f)(Args...);
+//      static constexpr Ret(*function)(Args...);
       
-//      template <template<class...> class ParamsTuple,
-//      class... ParamsTuples>
-      auto operator() (const paramsTuples& paramsTuples)
+//      static constexpr auto s = T();
+//      static constexpr T q = t;
+//      using ret = typename make_tuple_of_params<T>::ret;
+};
+
+template <class Func>
+struct Z : public Y<decay_t<Func>>
+{
+      
+};
+
+//template <class T>
+//struct X;
+
+
+
+template <class Fun>
+struct Q;
+
+template <class Ret, class... Args>
+struct Q<Ret(Args...)>
+{
+      using ret = Ret;
+      
+};
+
+template <auto _func, typename _Func = decltype(_func), typename Func = decay_t<_Func>, auto func = _func>
+struct fun
+{
+//      using Func = typename decay<decltype(func)>::type;
+      typedef integral_constant<decltype(func), func> m_func;
+      
+//      template <size_t Q>
+//      using params =
+
+//      template <size_t Q>
+//      using params = typename make_tuple_of_n<typename make_tuple_of_params<Func>::params, Q>::type;// paramsTuple;
+
+      template <size_t Q>
+      using returns = typename make_tuple_of_n<typename make_tuple_of_params<Func>::ret, Q>::type;
+
+      template <template<class...> class ParamsTuple,
+      class... ParamsTuples>
+      auto operator() (const ParamsTuple<ParamsTuples...>& paramsTuples)
       {
             return dispatch_paramtuples (func, paramsTuples);
       }
@@ -311,11 +395,14 @@ struct execute
 
 
 
+//struct S {
+//      double operator()(char, int&);
+//      float operator()(int) { return 1.0;}
+//};
 
-
-
-
-
+//std::result_of<S(char, int&)>::type d = 3.14; // d has type double
+//std::result_of<decltype(&printTwoNumbers)(int, int)>::type d1 = 3.14; // d has type double
+//std::invoke_result<decltype(printTwoNumbers),int, int> d2;
 
 
 }

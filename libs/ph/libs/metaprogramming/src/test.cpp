@@ -12,63 +12,119 @@ int sum (int i, int j)
       return i + j;
 }
 
-struct S {
-      double operator()(char, int&);
-      float operator()(int) { return 1.0;}
+template<typename T>
+void printDecayedType()
+{
+      using A = typename decay<T>::type;
+//      using A = T;
+      std::cout << "Parameter type: " << typeid(A).name() << '\n';
+      std::cout << "- is int:     " << std::is_same<A,int>::value << '\n';
+      std::cout << "- is const:   " << std::is_const<A>::value << '\n';
+      std::cout << "- is pointer: " << std::is_pointer<A>::value << '\n';
+}
+
+constexpr int print(){
+//      cout << "HELLO" << endl;
+      return 0;
+}
+
+template<int n>
+struct constN
+{
+      constN() { std::cout << n << '\n'; }
 };
+
+const char* kiss()
+{
+      return "hej";
+}
+
+template <int N>
+constexpr int size (char const(&a)[N])
+{
+      cout << a << endl;
+      return N;
+}
+
+
+//struct S {
+//      double operator()(char, int&);
+//      float operator()(int) { return 1.0;}
+//};
 
 void Testing::run ()
 {
-//      {summa1, summa2, summa3} = sum {{4,5}, {4,6}, {4, 6}};
-      
-      make_tuple_of_params<decltype(sum)>::params s;
-      
-      
-      
-      // tuple ( tuple (double, double), tuple (double, double), tuple (double, double), tuple (double, double) )
-      make_tuple_of_n<make_tuple_of_params<decltype(sum)>::params, 4>::type paramsTuple;
-      
-      // tuple ( tuple (const char*), tuple (const char*), tuple (const char*), tuple (const char*) )
-      make_tuple_of_n<make_tuple_of_params<decltype(sum)>::return_type, 4>::type returnTuple;
+      pr("hej");
+//      printDecayedType<int>();
+//      printDecayedType<int const>();
+//      printDecayedType<int[7]>();
+//      printDecayedType<int(int)>();
       
       
-//      dispatch_params(printTwoNumbers, make_tuple(1,2));
+      constN<5> out1;
+      return;
       
-      auto i = dispatch_paramtuples(sum, make_tuple(make_tuple(1,2), make_tuple(3,4)));
-      cout << i << endl;
+//      Y<decltype(sum)> q;
+//      Y<decltype(sum)>::function(1, 2);
+      
+//      cout << q.q();
+      //      {summa1, summa2, summa3} = sum {{4,5}, {4,6}, {4, 6}};
+      
+      //      make_tuple_of_params<decltype(sum)>::params s;
+      //
+      //
+      //
+      //      // tuple ( tuple (double, double), tuple (double, double), tuple (double, double), tuple (double, double) )
+      //      make_tuple_of_n<make_tuple_of_params<decltype(sum)>::params, 4>::type paramsTuple;
+      //
+      //      // tuple ( tuple (const char*), tuple (const char*), tuple (const char*), tuple (const char*) )
+      //      make_tuple_of_n<make_tuple_of_params<decltype(sum)>::return_type, 4>::type returnTuple;
+      
+      
+      //      using F = execute<decltype(sum), sum>;
+      //      F::paramsTuple<3> t = {{0, 2}, {3, 4}, {5, 6}};
+      //      auto r = F()(t);
+      //      cout << r << endl;
+      
+      
+    
+      std::invoke_result<decltype(sum),int, int>::type d2 = 7;
+      
+      
+//      make_tuple_of_params<decltype(sum)>::ret::type a = 8;
+//      make_tuple_of_params<decltype(sum)>::r::type a;// a = 8;
+//      aa::type s;
       
       
       
-      tuple<tuple<int,int>,tuple<int,int>,tuple<int,int>> a = {{1,2}, {3,4}, {5,6}};
+      //      using F = function<decltype(sum), sum>;
+      using F = function<decltype(sum), sum>;
+      F::params<3> p = {{0, 2}, {3, 4}, {5, 6}};
+      auto r = F()(p);
+      cout << r << endl;
+//      F::returns<3> r2 = {1, 2, 2};
       
-      auto i2 = dispatch_paramtuples(sum, a);
-      cout << i2 << endl;
-      
-//      execute<decltype(printTwoNumbers), 3>::paramsTuples ss = {{1,2}, {3,4}, {5,6}};
-      
-      
-//      auto returnT = dispatch_params(printTwoNumbers, a);
-//      cout << get<0>(returnT) << endl;
-//      auto returnT2 = dispatch_params(printTwoNumbers, make_tuple(4));
+//      using F2 = fun<sum>;
+//      F2::params<3> p2 = {{0, 2}, {3, 4}, {5, 6}};
+//      auto r3 = F2()(p);
+//      cout << r3 << endl;
+//      F2::returns<3> r4 = {1, 2, 2};
       
       
-//      cout << get<0>(s) << endl;
-//      cout << tuple_size<decltype(s)>::value << endl;
-//      std::result_of<S(char, int&)>::type d = 3.14; // d has type double
-//      std::result_of<decltype(&printTwoNumbers)(int, int)>::type d1 = 3.14; // d has type double
-//      std::invoke_result<decltype(printTwoNumbers),int, int> d2;
-
-      make_tuple_of_n<int, 10>::type q;
-//      execute<decltype(printTwoNumbers), 3> K;
-//      execute<decltype(printTwoNumbers), 3>::paramsTuples sss = {{0, 2}, {3, 4}, {5, 6}};
-//      auto ii = execute<decltype(printTwoNumbers), 3>()(printTwoNumbers, sss);
-//      cout << ii << endl;
-//      auto iii = execute<decltype(printTwoNumbers), printTwoNumbers, 3>()({{0, 2}, {3, 4}, {5, 6}});
-      auto k = execute<decltype(sum), sum>
-//      auto iii = execute<decltype(sum), sum, 3>()({{0, 2}, {3, 4}, {5, 6}});
-//      cout << iii << endl;
+      Q<decltype(kiss)>::ret a = "km";
       
-//      sum(5);
+      
+      
+//      make_tuple_of_returns<decltype(sum)>::ret r2= {3};
+      //      F::rets<3> s = {1, 2, 3};
+      
+      //      using P = F::parameters<decltype(p)>;
+      //      auto i = F().run(p);
+      
+      
+      
+      
+      
       
       
       test_Size ();
@@ -128,3 +184,10 @@ void Testing::test_concat ()
 
 
 
+
+
+//      cout << get<0>(s) << endl;
+//      cout << tuple_size<decltype(s)>::value << endl;
+//      std::result_of<S(char, int&)>::type d = 3.14; // d has type double
+//      std::result_of<decltype(&printTwoNumbers)(int, int)>::type d1 = 3.14; // d has type double
+//      std::invoke_result<decltype(printTwoNumbers),int, int> d2;
