@@ -1,6 +1,7 @@
 #pragma once
 namespace ph::metaprogramming
 {
+using namespace std;
 
 
 ////////////////////////////////////////////////////////////////
@@ -61,15 +62,19 @@ struct pop_front<List<Head, Tail...>>
       using type = List<Tail...>;
 };
 
+template <template <class...> class List, class... T>
+using pop_front_t = typename pop_front<List<T...>>::type;
+
+
 ////////////////////////////////////////////////////////////////
 /// @brief pop empty type container is OK, does nothing
 /// @example pop_front<tuple<>>::type t3 = {};
 ////////////////////////////////////////////////////////////////
-template <template <class...> class List>
-struct pop_front<List<>>
-{
-      using type = List<>;
-};
+//template <template <class...> class List>
+//struct pop_front<List<>>
+//{
+//      using type = List<>;
+//};
 
 
 
@@ -342,6 +347,28 @@ struct fun
 
 
 
+template <class Iter, class Callable, class... Args>
+void doit (Iter current, Iter end, Callable op, Args const&... args)
+{
+      while (current != end) {
+            invoke (op, args..., *current);
+            ++current;
+      }
+}
+
+
+
+template <class Callable, class... Args>
+decltype(auto) call (Callable&& callable, Args&&... args)
+{
+      if constexpr (std::is_same_v<std::invoke_result_t<Callable, Args...>, void>)
+            return std::invoke (std::forward<Callable>(callable),
+                                std::forward<Args>(args)...);
+      
+      decltype(auto) ret{ std::invoke (std::forward<Callable>(callable),
+                                       std::forward<Args>(args)...)};
+      return ret;
+}
 
 
 
@@ -353,56 +380,6 @@ struct fun
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//struct S {
-//      double operator()(char, int&);
-//      float operator()(int) { return 1.0;}
-//};
-
-//std::result_of<S(char, int&)>::type d = 3.14; // d has type double
-//std::result_of<decltype(&printTwoNumbers)(int, int)>::type d1 = 3.14; // d has type double
-//std::invoke_result<decltype(printTwoNumbers),int, int> d2;
 
 
 }

@@ -15,6 +15,7 @@ private:
       void test_pop_front ();
       void test_rename ();
       void test_concat ();
+      void test_typelist ();
 };
 
 

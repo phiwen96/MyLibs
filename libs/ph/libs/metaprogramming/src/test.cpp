@@ -1,5 +1,7 @@
 #include <ph/metaprogramming/test.hpp>
 #include <ph/metaprogramming/metaprogramming.hpp>
+#include <ph/metaprogramming/typelist.hpp>
+using namespace std;
 
 
 
@@ -42,9 +44,35 @@ const char* kiss()
 template <int N>
 constexpr int size (char const(&a)[N])
 {
-      cout << a << endl;
       return N;
 }
+
+template <int t>
+struct Loop
+{
+      static constexpr long long value = 10 + Loop<t-1>::value;
+};
+
+template<>
+struct Loop<1>
+{
+      static constexpr long long value = 10;
+};
+
+constexpr long long sum(int s)
+{
+      long long ret = 0;
+      for (int i = 0; i < s; ++i) {
+            ret++;
+      }
+      return ret;
+}
+// repeatedly determine in which half of a [lo, hi] interval the square root of x is located,
+// until the interval is reduced to just one value:
+
+
+
+
 
 
 //struct S {
@@ -54,85 +82,55 @@ constexpr int size (char const(&a)[N])
 
 void Testing::run ()
 {
-      pr("hej");
-//      printDecayedType<int>();
-//      printDecayedType<int const>();
-//      printDecayedType<int[7]>();
-//      printDecayedType<int(int)>();
       
       
-      constN<5> out1;
-      return;
       
-//      Y<decltype(sum)> q;
-//      Y<decltype(sum)>::function(1, 2);
-      
-//      cout << q.q();
-      //      {summa1, summa2, summa3} = sum {{4,5}, {4,6}, {4, 6}};
-      
-      //      make_tuple_of_params<decltype(sum)>::params s;
-      //
-      //
-      //
       //      // tuple ( tuple (double, double), tuple (double, double), tuple (double, double), tuple (double, double) )
       //      make_tuple_of_n<make_tuple_of_params<decltype(sum)>::params, 4>::type paramsTuple;
       //
       //      // tuple ( tuple (const char*), tuple (const char*), tuple (const char*), tuple (const char*) )
       //      make_tuple_of_n<make_tuple_of_params<decltype(sum)>::return_type, 4>::type returnTuple;
       
-      
-      //      using F = execute<decltype(sum), sum>;
-      //      F::paramsTuple<3> t = {{0, 2}, {3, 4}, {5, 6}};
-      //      auto r = F()(t);
-      //      cout << r << endl;
-      
-      
-    
-      std::invoke_result<decltype(sum),int, int>::type d2 = 7;
-      
-      
-//      make_tuple_of_params<decltype(sum)>::ret::type a = 8;
-//      make_tuple_of_params<decltype(sum)>::r::type a;// a = 8;
-//      aa::type s;
-      
-      
-      
-      //      using F = function<decltype(sum), sum>;
-      using F = function<decltype(sum), sum>;
-      F::params<3> p = {{0, 2}, {3, 4}, {5, 6}};
-      auto r = F()(p);
-      cout << r << endl;
-//      F::returns<3> r2 = {1, 2, 2};
-      
-//      using F2 = fun<sum>;
-//      F2::params<3> p2 = {{0, 2}, {3, 4}, {5, 6}};
-//      auto r3 = F2()(p);
-//      cout << r3 << endl;
-//      F2::returns<3> r4 = {1, 2, 2};
-      
-      
-      Q<decltype(kiss)>::ret a = "km";
-      
-      
-      
-//      make_tuple_of_returns<decltype(sum)>::ret r2= {3};
-      //      F::rets<3> s = {1, 2, 3};
-      
-      //      using P = F::parameters<decltype(p)>;
-      //      auto i = F().run(p);
-      
-      
-      
-      
-      
-      
-      
-      test_Size ();
-      test_push_back ();
-      test_rename ();
-      test_concat ();
+
+//      std::invoke_result<decltype(sum),int, int>::type d2 = 7;
+//
+//
+//
+//      //      using F = function<decltype(sum), sum>;
+//      using F = function<decltype(sum), sum>;
+//      F::params<3> p = {{0, 2}, {3, 4}, {5, 6}};
+//      auto r = F()(p);
+//      cout << r << endl;
+//
+//
+//      Q<decltype(kiss)>::ret a = "km";
+//
+//
+//
+//
+//      test_Size ();
+//      test_push_back ();
+//      test_rename ();
+//      test_concat ();
+      test_typelist();
 }
 
+
+void Testing::test_typelist()
+{
+      int i = 2;
+      using mylist = Typelist<int, bool, const char*>;
+      static_assert(is_same_v<ith<0, mylist>::type, int>);
+      static_assert(is_same_v<ith<1, mylist>, bool>);
+      static_assert(is_same_v<ith<2, mylist>::type, const char*>);
+      
+      static_assert(is_same_v<pop_front<mylist>::type, Typelist<bool, const char*>>);
+      
+      
+      
+//      static_assert(is_same_v<pop<1, mylist>::type, Typelist<int, const char*>>);
+
+}
 
 void Testing::test_Size ()
 {
