@@ -13,6 +13,8 @@ struct Testing : ph::testing::Testing
 private:
       void test_point ();
       void test_vector ();
+      void test_line ();
+      void test_plane ();
     
 };
 

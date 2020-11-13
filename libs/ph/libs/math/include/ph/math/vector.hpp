@@ -2,67 +2,36 @@
 #include <ph/math/point.hpp>
 #include <ph/math/definitions.h>
 #include <math.h>
+#include <ph/math/math.hpp>
 
 namespace ph::math
 {
 
 
-//template <class Point, class Magnitude = double>
-//template <class Point>
+
 template <class... T>
 class vector
 {
-//      template <class... T>
-//      using Point = point<T...>;
+      static_assert(is_arith<T...>::value, "not arith");
       typedef std::integral_constant<size_t, sizeof...(T)> m_size;
       
 public:
-//      vector (const Magnitude& magnitude, const Point& unit_vector) : m_magnitude ((const double&)magnitude), m_unit_vector (unit_vector)
-//      {
-//            
-//      }
-      
-//      template <class M, class V>
-      
-      
       
       vector (const vector& other) : m_magnitude (other.m_magnitude), m_unit_vector (other.m_unit_vector)
       {
 
       }
       
-//      template <class M, class V>
-//      vector (vector<M, V>&& other) : m_magnitude ((double&&)other.m_magnitude), m_unit_vector ((Point&&)other.m_unit_vector)
-//      {
-//
-//      }
       vector (const point<T...>& p) : m_magnitude (p.magnitude()), m_unit_vector (p / m_magnitude)
       {
             
       }
       
-//      template <class... T>
       vector (double&& head, T&&... t) : vector (point<T...>((double&&)head, (T&&)t...))
       {
             
       }
       
-      
-      
-//      vector& operator= (vector other)
-//      {
-//            swap(m_unit_vector, other.m_unit_vector);
-////            swap(m_magnitude, other.m_magnitude);
-//            return *this;
-//      }
-      
-//      template<typename Head, typename... Tail>
-//      vector (const Head& head, const Tail&... tail) : vector ({head, tail...})
-//      {
-//
-//      }
-      
-     
       constexpr size_t size () const
       {
             return m_size::value;
@@ -192,7 +161,6 @@ public:
       ////////////////////////////////////////////////////////////////
       /// @brief Add another vector
       ////////////////////////////////////////////////////////////////
-//      template <class M, class P>
       template <class... U>
       vector& operator+= (const vector<U...>& other)
       {
@@ -214,7 +182,6 @@ public:
             return m_unit_vector * m_magnitude;
       }
       
-//      template <class M, class P>
       template <class... U>
       vector& operator-= (const vector<U...>& other)
       {
@@ -223,11 +190,6 @@ public:
             return *this;
       }
       
-//      template <class... U>
-//      vector& operator*= (const vector& other)
-//      {
-//            static_assert(sizeof...(T) == sizeof...(U));
-//      }
       
       ////////////////////////////////////////////////////////////////
       /// @brief Scalar multiplication of a vector

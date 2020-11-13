@@ -1,4 +1,5 @@
 #pragma once
+#include <ph/data_structures/data_structures.hpp>
 namespace ph::algorithms
 {
 
@@ -34,6 +35,7 @@ void insertion_sort (List<E, Elements...>& A, CompFunc compFunc )
             A [i + 1] = key;
       }
 }
+
 
 template <template <class...> class List, class... Elements, class CompFunc>
 void selection_sort (List<Elements...>& A, CompFunc compFunc)

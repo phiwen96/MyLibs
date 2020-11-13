@@ -118,15 +118,15 @@ void Testing::run ()
 
 void Testing::test_typelist()
 {
-      int i = 2;
-      using mylist = Typelist<int, bool, const char*>;
-      static_assert(is_same_v<ith<0, mylist>::type, int>);
-      static_assert(is_same_v<ith<1, mylist>, bool>);
-      static_assert(is_same_v<ith<2, mylist>::type, const char*>);
-      
-      static_assert(is_same_v<pop_front<mylist>::type, Typelist<bool, const char*>>);
-      
-      
+//      int i = 2;
+//      using mylist = Typelist<int, bool, const char*>;
+//      static_assert(is_same_v<ith<0, mylist>::type, int>);
+//      static_assert(is_same_v<ith<1, mylist>, bool>);
+//      static_assert(is_same_v<ith<2, mylist>::type, const char*>);
+//
+//      static_assert(is_same_v<pop_front<mylist>::type, Typelist<bool, const char*>>);
+//
+//
       
 //      static_assert(is_same_v<pop<1, mylist>::type, Typelist<int, const char*>>);
 
@@ -162,7 +162,7 @@ void Testing::test_pop_front ()
       ////////////////////////////////////////////////////////////////
       /// @brief pop empty type container
       ////////////////////////////////////////////////////////////////
-      pop_front<tuple<>>::type t3 = {};
+//      pop_front<tuple<>>::type t3 = {};
       
 }
 

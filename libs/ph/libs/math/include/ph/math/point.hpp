@@ -1,10 +1,40 @@
 #pragma once
-
+#include <ph/math/math.hpp>
 
 //#include <ph/math/vector.hpp>
 //#include <ph/u
 namespace ph::math
 {
+
+
+template <class T>
+class ObjectCounter
+{
+private:
+      inline static std::size_t m_count = 0;
+      
+protected:
+      ObjectCounter ()
+      {
+            m_count++;
+      }
+      
+public:
+      static std::size_t live ()
+      {
+            return m_count;
+      }
+};
+
+template <class T>
+class mathOperations
+{
+      
+};
+
+
+
+
 
 
 
@@ -14,31 +44,16 @@ namespace ph::math
 template<typename... T>
 class point
 {
-//      inline static constexpr bool areSame_v = std::conjunction_v<std::is_same<Head,Tail>...>;
-      inline static constexpr bool areArithemetic_v = std::conjunction_v<std::is_arithmetic<T>...>;
+      static_assert(is_arith<T...>::value, "not arith");
       using Self = point<T...>;
       typedef std::integral_constant<size_t, sizeof...(T) + 1> m_size;
-//      template <class T, class... U>
-//      friend class point;
-      
 
-      
 public:
-      
-
       point (double&& head, T&&... tail) : m_coordinates {(double&&)head, (double&&)tail...} //, m_size (sizeof...(Tail)+1)
       {
-//            static_assert(areSame_v, "oops");
-//            static_assert(std::is_arithmetic_v<Head>, "oops");
+
       }
-      
-//      point (double&& head, Tail&&... tail) : m_coordinates {head, static_cast<double>((Tail&&)tail)...} //, m_size (sizeof...(Tail)+1)
-//      {
-////            static_assert(areSame_v, "oops");
-////            static_assert(std::is_arithmetic_v<Head>, "oops");
-//      }
-      
-//      template <class U...>
+
       point (const point<T...>& other) : m_coordinates (other.m_coordinates)
       {
       }
@@ -47,20 +62,7 @@ public:
       {
             
       }
-      
-      
-//      point (const vector<T...>& vec) : point (vec.position_vector())
-//      {
-//
-//      }
-      
-      
-//      template <class M, class P>
-//      operator ph::math::vector<Self> ()
-//      {
-//            return vector (magnitude(), *this/magnitude());
-//      }
-      
+
       double magnitude () const
       {
             double s (0);
@@ -71,24 +73,11 @@ public:
             return sqrt (s);
       }
       
-//      template <class...U>
       point& operator= (point<T...> other)
       {
             static_assert_same_dimension (*this, other);
             swap(m_coordinates, other.m_coordinates);
             return *this;
-      }
-      
-      
-      
-      friend std::ostream& operator<< (std::ostream& os, const point& p)
-      {
-//            os << m_coordinates;
-            os << "( ";
-            for (const auto& i : p.m_coordinates)
-                  os << i << " ";
-            os << ")";
-            return os;
       }
       
       double& operator[] (const size_t& i)
@@ -153,7 +142,6 @@ public:
             return *this;
       }
       
-//      template <class Number>//, typename std::enable_if<std::is_arithmetic<Number>::value>::type = 0>
       point& operator*= (const double& scalar)
       {
             
@@ -164,7 +152,6 @@ public:
             return *this;
       }
       
-//      template <class Number>//, typename std::enable_if<std::is_arithmetic<Number>::value>::type = 0>
       point& operator/= (const double& scalar)
       {
             
@@ -174,17 +161,13 @@ public:
             }
             return *this;
       }
-      
-//      template <class Number>//, typename std::enable_if<std::is_arithmetic<Number>::value>::type = 0>
-      
+            
       friend point<T...> operator* (point<T...> p, const double& n)
       {
             p *= (double)n;
             return p;
       }
       
-//      template <class Number>//, typename std::enable_if<std::is_arithmetic<Number>::value>::type = 0>
-//      template <class... U>
       friend point<T...> operator/ (point<T...> p, const double& n)
       {
             p /= (double)n;
@@ -208,17 +191,21 @@ public:
       }
       
       template <class... U>
-      // friends defined inside class body are inline and are hidden from non-ADL lookup
-      friend point<T...> operator+(point<T...> lhs,        // passing lhs by value helps optimize chained a+b+c
-                         const point<U...>& rhs) // otherwise, both parameters may be const references
+      friend point<T...> operator+(point<T...> lhs, const point<U...>& rhs)
       {
             lhs += rhs; // reuse compound assignment
             return lhs; // return the result by value (uses move constructor)
       }
       
       
-      
-      
+      friend std::ostream& operator<< (std::ostream& os, const point& p)
+      {
+            os << "( ";
+            for (const auto& i : p.m_coordinates)
+                  os << i << " ";
+            os << ")";
+            return os;
+      }
       
       
 private:
@@ -232,10 +219,30 @@ private:
       
       template <class... U>
       friend class vector;
+      
+      friend class mathOperations<point<T...>>;
 };
 
 
 
+
+
+
+template <class... T>
+class mathOperations<point<T...>>
+{
+public:
+      friend std::ostream& operator<< (std::ostream& os, const mathOperations& pp)
+      {
+            const point<T...>& p = (const point<T...>&) pp;
+            //            os << m_coordinates;
+            os << "( ";
+            for (const auto& i : p.m_coordinates)
+                  os << i << " ";
+            os << ")";
+            return os;
+      }
+};
 
 
 
