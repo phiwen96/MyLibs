@@ -22,15 +22,17 @@ public:
 
       }
       
-      vector (const point<T...>& p) : m_magnitude (p.magnitude()), m_unit_vector (p / m_magnitude)
+//      template <class... A>
+      vector (const point<T...>& p) : m_magnitude (p.magnitude()), m_unit_vector ((p / p.magnitude()))
       {
-            
+
       }
       
-      vector (double&& head, T&&... t) : vector (point<T...>((double&&)head, (T&&)t...))
-      {
-            
-      }
+      
+//      vector (T&&... t) : vector (point{(double&&)(T&&)t...})
+//      {
+//
+//      }
       
       constexpr size_t size () const
       {

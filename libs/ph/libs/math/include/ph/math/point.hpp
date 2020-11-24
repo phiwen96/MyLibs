@@ -7,30 +7,7 @@ namespace ph::math
 {
 
 
-template <class T>
-class ObjectCounter
-{
-private:
-      inline static std::size_t m_count = 0;
-      
-protected:
-      ObjectCounter ()
-      {
-            m_count++;
-      }
-      
-public:
-      static std::size_t live ()
-      {
-            return m_count;
-      }
-};
 
-template <class T>
-class mathOperations
-{
-      
-};
 
 
 
@@ -48,20 +25,36 @@ class point
       using Self = point<T...>;
       typedef std::integral_constant<size_t, sizeof...(T) + 1> m_size;
 
-public:
-      point (double&& head, T&&... tail) : m_coordinates {(double&&)head, (double&&)tail...} //, m_size (sizeof...(Tail)+1)
-      {
-
-      }
-
-      point (const point<T...>& other) : m_coordinates (other.m_coordinates)
-      {
-      }
-      
-      point (point<T...>&& other) : m_coordinates ((std::vector<double>&&) other.m_coordinates)
+     
+      point ()
       {
             
       }
+      
+public:
+      point (double&& first, T&&... tail) : m_coordinates {(double&&) first, (double&&)tail...} //, m_size (sizeof...(Tail)+1)
+      {
+
+      }
+
+      point (const point<T...>& other)
+      {
+            std::copy(std::begin(other.m_coordinates), std::end(other.m_coordinates), std::begin(m_coordinates));
+      }
+      
+      point (point<T...>&& other)
+      {
+            std::swap(m_coordinates, other.m_coordinates);
+      }
+      
+      template <typename A>
+      point (std::initializer_list<A> a)
+      {
+            std::cout << m_size::value << "sda" << std::endl;
+      }
+      
+      
+      
 
       double magnitude () const
       {
@@ -75,8 +68,8 @@ public:
       
       point& operator= (point<T...> other)
       {
-            static_assert_same_dimension (*this, other);
-            swap(m_coordinates, other.m_coordinates);
+//            static_assert_same_dimension (*this, other);
+            std::swap(m_coordinates, other.m_coordinates);
             return *this;
       }
       
@@ -132,7 +125,7 @@ public:
       template <class... U>
       point& operator-=(const point<U...>& other)
       {
-            static_assert_same_dimension (*this, other);
+//            static_assert_same_dimension (*this, other);
             
             for(int i = 0; i < size(); ++i)
             {
@@ -185,7 +178,7 @@ public:
       template <class... U>
       friend point<T...> operator- (point<T...> first, const point<U...>& second)
       {
-            static_assert_same_dimension (first, second);
+//            static_assert_same_dimension (first, second);
             first -= second;
             return first;
       }
@@ -209,7 +202,9 @@ public:
       
       
 private:
-      std::vector<double> m_coordinates;
+//      std::vector<double> m_coordinates;
+      double m_coordinates [sizeof...(T) + 1];
+      
       
       template <class U, class... V, class X, class... Y>
       friend void static_assert_same_dimension (const point<U, V...>& first, const point<X, Y...>& second)
@@ -228,21 +223,6 @@ private:
 
 
 
-template <class... T>
-class mathOperations<point<T...>>
-{
-public:
-      friend std::ostream& operator<< (std::ostream& os, const mathOperations& pp)
-      {
-            const point<T...>& p = (const point<T...>&) pp;
-            //            os << m_coordinates;
-            os << "( ";
-            for (const auto& i : p.m_coordinates)
-                  os << i << " ";
-            os << ")";
-            return os;
-      }
-};
 
 
 

@@ -24,8 +24,8 @@ add_library(${PROJECT_NAME}
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-# target_link_libraries(${PROJECT_NAME} PUBLIC ph::time::date ph::time::timer)
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_link_libraries(${PROJECT_NAME} PUBLIC ph::utility)
+target_include_directories(${PROJECT_NAME} PRIVATE include ph::utility)
 
 
 link(${PROJECT_NAME})

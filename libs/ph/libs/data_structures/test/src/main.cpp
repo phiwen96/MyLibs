@@ -1,13 +1,13 @@
 #include <test/main.hpp>
 #include <ph/data_structures/data_structures.hpp>
 #include <ph/data_structures/test.hpp>
-// using namespace ph::algorithms;
+ using namespace ph::data_structures;
 
 int main(int argc, char** argv)
 {
        
-      // Testing t;
-      // t.run();
+       Testing t;
+       t.run();
       
       
       

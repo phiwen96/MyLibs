@@ -15,6 +15,7 @@ private:
       void test_vector ();
       void test_line ();
       void test_plane ();
+      void test_matrix ();
     
 };
 

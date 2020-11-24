@@ -23,6 +23,8 @@ add_library(${PROJECT_NAME}
   ${HEADERS}
 )
 
+target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.pch)
+
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -34,11 +36,13 @@ target_include_directories(${PROJECT_NAME}
   Vulkan::Vulkan
   glfw
   glm::glm
+  ${VULKAN_INCLUDE_DIRS}
 )
 target_link_libraries(${PROJECT_NAME} 
   PRIVATE 
   Vulkan::Vulkan
   glfw
+  ${VULKAN_LIB_LIST}
 )
 
 
@@ -48,7 +52,7 @@ target_link_libraries(${PROJECT_NAME}
 
 
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.pch)
+
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY EXPORT_NAME ${name})
 bcm_deploy(TARGETS ${PROJECT_NAME} INCLUDE include NAMESPACE ph::)
