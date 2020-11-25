@@ -163,6 +163,8 @@ void Testing::test_matrix ()
             {1, 2, 3},
             {4, 5, 6}
       };
+      cout << m1 << endl;
+      
       Matrix<3, 2, int> m2 = {
             {7, 8},
             {9, 10},
