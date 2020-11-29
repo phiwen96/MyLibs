@@ -36,3 +36,5 @@
 * Scroll 
     * Ctr + down / up / left / right
     
+    
+You can quickly view the list of all usages of a class, function, or variable in your project by pressing Alt+F7 (Edit | Find | Find Usages)
