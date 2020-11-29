@@ -10,13 +10,161 @@ namespace ph::math
 
 
 
+class Refcount
+{
+protected:
+      int count = 0;
+};
 
+template <size_t N1, size_t... N2>
+class Mat{
+      int bajs;
+      
+public:
+      template <class, class, size_t...> class Dim;
+      
+      template <class D, class T, size_t A> class Dim<D, T, A>{
+            T* m_t;
+      public:
+            Dim() : m_t(new T[A]{0})
+            {
+                  
+            }
+            
+//            template <class... U, typename = enable_if_t<sizeof...(U) == A>>
+            Dim (T (&&u) [A]) : m_t (move(u))
+            {
+                  
+            }
+            
+            template <size_t Q, class... U>//, typename = enable_if_t<sizeof...(U) == A>>
+            Dim (U (&&... u)[Q][A]) : m_t (new T[A]{u...})
+            {
+//                  cout << sizeof...(B) + 1 << endl;
+            }
+            
+            
+            
+            
+            
+            
+       
+            
+            auto operator[] (int i)
+            {
+                  return m_t[i];
+            }
+            
+            const auto& operator[] (int i) const
+            {
+                  return *m_t[i];
+            }
+            
+            friend ostream& operator<< (ostream& os, Dim const& d)
+            {
+                  for (int i = 0; i < A; ++i) {
+                        os << d.m_t[i] << " ";
+                  }
+                  return os;
+            }
+      };
+      
+      template <class D, class T, size_t A, size_t... B>
+      class Dim<D, T, A, B...>
+      {
+            using M = Dim<Dim<D, T, A, B...>, T, B...>;
+            M* m_dim;
+          
+            
+      public:
 
+            
+            Dim ( ) : m_dim(new M[A]{})
+            {
+                  
+            }
+            
+            template <size_t N, class... U>//, typename = enable_if_t<sizeof...(U) == A>>
+            Dim (U (&&... u)[N]) : m_dim (new M[A]{move(u)...})
+            {
+                  
+            }
+            
+            
+            
+//            template <size_t Q, class... U>//, typename = enable_if_t<sizeof...(U) == A>>
+//            Dim (U (&&... u)[Q][A]) : m_dim (new M[A]{u...})
+//            {
+//                  cout << sizeof...(B) + 1 << endl;
+//            }
+            
+            
+            
+            auto operator[] (int i)
+            {
+                  return m_dim[i];
+            }
+            
+            const auto& operator[] (int i) const
+            {
+                  return m_dim[i];
+            }
+            
+            friend ostream& operator<< (ostream& os, Dim const& d)
+            {
+                  for (int i = 0; i < A; ++i) {
+                        os << d.m_dim[i] << " ";
+                  }
+                  return os;
+            }
+            
 
+            
+            
+            
+      };
+      
+      
+      
+      template <class T, class... U> class Matrix;
+      
+      template <class T>
+      class Matrix<T> : public Dim<Matrix<T>, T, N1, N2...> // : public Dim<Matrix<T>, T*, N2..., N1>
+      {
+            using Base = Dim<Matrix<T>, T, N1, N2...>;
+            using Base::Base;
+      public:
+            
+            template <size_t Q, class... U>//, typename = enable_if_t<sizeof...(U) == A>>
+            Matrix (U (&&... u)[Q][N1]) //(new M[A]{u...})
+            {
+                  
+                  cout << Q << " x " << N1 << endl;
+                        (([&](auto a){
+                              for (int i = 0; i < Q; ++i) {
+                                    for (int j = 0; j < N1; ++j) {
+                                          cout << u[i][j];
+                                    }
+                                    cout << endl;
+                              }
+                              cout << endl;
+                        }(u)),...);
+                  
+                  
+//                  cout << sizeof...(B) + 1 << endl;
+            }
+            
+            
+            
+
+      };
+      
+      
+};
 
 
 template <size_t Y, size_t X, class T>
-class Matrix
+class Matrix : public Refcount
 {
       template <size_t A, class U>
       using Row = Matrix<1, A, U>;
@@ -33,132 +181,140 @@ class Matrix
       
       
       
-      Row<X, T>* m_rows;
+      T** m_elements;
       unsigned int m_y;
       unsigned int m_x;
       
 public:
       
-      template <class U = T, typename = enable_if_t<is_convertible_v<T, U>>>
-      Matrix<X, Y, U> transpose () const
-      {
-            
-            Row<Y, U>* r = new Row<Y, U>[X]{};
-            
-            for (int x = 0; x < m_x; ++x)
-            {
-                  for (int y = 0; y < m_y; ++y)
-                  {
-                        r[x][y] = (U const&) m_rows[y][x];
-                  }
-            }
-            
-            return Matrix<X, Y, U> (r);
-            
-            
-            
-            //            T** m = new T*[X]{[0 ... X - 1] = new T[Y]{}};
-            //
-            //            for (int x = 0; x < m_x; ++x) {
-            //                  for (int y = 0; y < m_y; ++y) {
-            ////                        cout << m_rows[y][x] << " ";
-            ////                        r[y][x] = m_rows[x][y];
-            //                  }
-            ////                  cout << endl;
-            //            }
-            
-            //            for (int x = 0; x < m_x; ++x) {
-            //                  cout << r[x] << endl;
-            //            }
-            
-            
-            
-      }
       
-      template <size_t r, size_t k, class T0, size_t p, class T1>
-      friend Matrix<r, p, T> operator * (Matrix<r, k, T0> lhs, Matrix<k, p, T1> const& rhs)
-      {
-            
-            Matrix<r, p, T0> res;
-            auto a = rhs.transpose();
-            
-            
-            
-            for(int y = 0; y < r; ++y)
-            {
-                  for(int x = 0; x < p; ++x)
-                  {
-//                        cout << lhs.row(y) << endl << " * " << endl << rhs.column(x) << endl << endl;
-                        //int l = lhs.row(y) * rhs.column(x);
-                        res[y][x] = lhs.row(y) * rhs.column(x);
-                  }
-            }
-            
-            return res;
-      }
       
-      Row<X, T>& operator[] (int i)
+      T** col (int x)
       {
-            // assert (i >= 0 && i < Y);
-            return m_rows[i];
-      }
-      
-      Row<X, T> const& operator[] (int i) const
-      {
-            // assert (i >= 0 && i < Y);
-            return m_rows[i];
-      }
-      
-      Column<Y, T> column (int c) const
-      {
-            // assert (c >= 0 && c < X);
-            Column<Y, T> r;
-            for (int i = 0; i < m_y; ++i) {
-                  r[i] = m_rows[i][c];
-            }
+            int i = 0;
+            T** r = new T*[Y]{[0 ... Y - 1] = &m_elements[i++][x]};
             return r;
       }
       
-      Row<X, T> row (int i) const
-      {
-            // assert (i >= 0 && i < Y);
-            return m_rows[i];
-      }
+      
+//      template <class U = T, typename = enable_if_t<is_convertible_v<T, U>>>
+//      Matrix<X, Y, U> transpose () const
+//      {
+//
+//            Row<Y, U>* r = new Row<Y, U>[X]{};
+//
+//            for (int x = 0; x < m_x; ++x)
+//            {
+//                  for (int y = 0; y < m_y; ++y)
+//                  {
+//                        r[x][y] = (U const&) m_rows[y][x];
+//                  }
+//            }
+//
+//            return Matrix<X, Y, U> (r);
+//      }
+      
+//      template <size_t r, size_t k, class T0, size_t p, class T1>
+//      friend Matrix<r, p, T> operator * (Matrix<r, k, T0> lhs, Matrix<k, p, T1> const& rhs)
+//      {
+//
+//            Matrix<r, p, T0> res;
+//            auto a = rhs.transpose();
+//
+//
+//
+//            for(int y = 0; y < r; ++y)
+//            {
+//                  for(int x = 0; x < p; ++x)
+//                  {
+//
+//                        res[y][x] = lhs.row(y) * rhs.column(x);
+//                  }
+//            }
+//
+//            return res;
+//      }
+      
+//      Row<X, T>& operator[] (int i)
+//      {
+//            // assert (i >= 0 && i < Y);
+//            return m_rows[i];
+//      }
+      
+//      Row<X, T> const& operator[] (int i) const
+//      {
+//            // assert (i >= 0 && i < Y);
+//            return m_rows[i];
+//      }
+//
+//      Column<Y, T> column (int c) const
+//      {
+//            // assert (c >= 0 && c < X);
+//            Column<Y, T> r;
+//            for (int i = 0; i < m_y; ++i) {
+//                  r[i] = m_rows[i][c];
+//            }
+//            return r;
+//      }
+//
+//      Row<X, T> row (int i) const
+//      {
+//            // assert (i >= 0 && i < Y);
+//            return m_rows[i];
+//      }
       
       
       
-      Matrix (Row<X, T>* rows) : m_rows (rows), m_x (X), m_y (Y)
-      {
-            
-      }
+//      Matrix<1, X, T>* begin ()
+//      {
+//            return m_rows;
+//      }
+//
+//      Matrix<1, X, T>* end ()
+//      {
+//            return m_rows + m_x - 1;
+//      }
       
-      Matrix () : m_rows (new Row<X, T>[Y]{}), m_y (Y), m_x (X)
-      {
-            
-      }
+      
+      
+//      Matrix (Row<X, T>* rows) : m_rows (rows), m_x (X), m_y (Y)
+//      {
+//
+//      }
+      
+//      Matrix () : m_elements (new T*[Y]{[0 ... Y - 1] = new T[X]{}}), m_y (Y), m_x (X)
+//      {
+//
+//      }
       
       
       
       template <class... U, typename = enable_if_t<sizeof...(U) == Y>>// && conjunction_v<is_convertible_v<U, T>...>>>
-      Matrix( U(&&...list)[X]) : m_rows (new Row<X, T>[Y]{move(list)...}), m_x (X), m_y (Y)
+      Matrix( U(&&...list)[X]) : m_elements (new T*[Y]{move(list)...}), m_x (X), m_y (Y)
       {
-            
+//            cout << "kuk" << endl;
       }
       
-      template <class U = T, typename = enable_if_t<is_convertible_v<U, T>>>
-      operator Matrix<X, Y, U> ()
-      {
-            Row<Y, U>* r = new Row<Y, U>[X]{};
-            
-            for (int x = 0; x < m_x; ++x)
-            {
-                  for (int y = 0; y < m_y; ++y)
-                  {
-                        r[x][y] = (U const&) m_rows[y][x];
-                  }
-            }
-            return move(r);
-      }
+//      template <class... U, typename = enable_if_t<sizeof...(U) == Y>>// && conjunction_v<is_convertible_v<U, T>...>>>
+//      Matrix( U(&&...list)[X]) : m_elements (new T*[Y]{move(list)...}), m_x (X), m_y (Y)
+//      {
+//            //            cout << "kuk" << endl;
+//      }
+      
+//      template <class U = T, typename = enable_if_t<is_convertible_v<U, T>>>
+//      operator Matrix<X, Y, U> ()
+//      {
+//            Row<Y, U>* r = new Row<Y, U>[X]{};
+//
+//            for (int x = 0; x < m_x; ++x)
+//            {
+//                  for (int y = 0; y < m_y; ++y)
+//                  {
+//                        r[x][y] = (U const&) m_rows[y][x];
+//                  }
+//            }
+//            return move(r);
+//      }
       
       
       
@@ -175,7 +331,10 @@ public:
             os << "\n";
             for (int y = 0; y < m.m_y; ++y) {
                   //                  os << "| ";
-                  os << m.m_rows[y];
+                  for (int x = 0; x < m.m_x; ++x) {
+                        os << m.m_elements[y][x] << " ";
+                  }
+                  
                   //                  os << "|";
                   os << "\n";
             }

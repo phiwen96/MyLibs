@@ -12,44 +12,49 @@ option(USE_QT "use qt library" OFF)
 option(USE_VULKAN "use vulkan graphics library" ON)
 option(USE_GLFW "use glfw library" ON)
 option(USE_GLM "use glm library" ON)
-
-
-file(GLOB SOURCES src/*.cpp)
-file(GLOB HEADERS include/ph/vulkan/*.hpp src/pch.pch)
-
-add_library(${PROJECT_NAME}
-  SHARED
-  ${SOURCES}
-  ${HEADERS}
-)
-
-target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.pch)
-
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 
+file(GLOB SOURCES src/*.hpp src/*.cpp)
+file(GLOB HEADERS include/ph/${name}/*.hpp src/pch.pch)
+
+add_library(${PROJECT_NAME}
+  SHARED
+  ${HEADERS}
+  ${SOURCES}
+)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+target_link_libraries(${PROJECT_NAME} 
+  PUBLIC 
+  ph::time
+  #Vulkan::Vulkan
+  ${Vulkan_LIBRARIES}
+  glfw
+)
+
 target_include_directories(${PROJECT_NAME} 
   PRIVATE 
   include
-  Vulkan::Vulkan
+  ph::time
+  #Vulkan::Vulkan
+  ${Vulkan_INCLUDE_DIR}
   glfw
-  glm::glm
-  ${VULKAN_INCLUDE_DIRS}
+  glm
 )
-target_link_libraries(${PROJECT_NAME} 
-  PRIVATE 
-  Vulkan::Vulkan
-  glfw
-  ${VULKAN_LIB_LIST}
-)
+
+
+
+
+
+
+
 
 
 # link(${PROJECT_NAME})
 
 
-
+target_precompile_headers(${PROJECT_NAME} PUBLIC src/pch.pch)
 
 
 
@@ -70,7 +75,7 @@ add_executable("${PROJECT_NAME}_test"
   ${test_HEADERS}
 )
 
-target_compile_features("${PROJECT_NAME}_test" PRIVATE cxx_std_17)
+target_compile_features("${PROJECT_NAME}_test" PRIVATE cxx_std_20)
 target_link_libraries("${PROJECT_NAME}_test" PRIVATE ${PROJECT_NAME})
 target_include_directories("${PROJECT_NAME}_test" PRIVATE test/include ${PROJECT_NAME})
 

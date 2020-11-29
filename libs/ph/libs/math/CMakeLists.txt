@@ -23,9 +23,9 @@ add_library(${PROJECT_NAME}
   ${HEADERS}
 )
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-target_link_libraries(${PROJECT_NAME} PUBLIC ph::utility)
-target_include_directories(${PROJECT_NAME} PRIVATE include ph::utility)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+target_link_libraries(${PROJECT_NAME} PUBLIC ph::utility ph::time)
+target_include_directories(${PROJECT_NAME} PRIVATE include ph::utility ph::time)
 
 
 link(${PROJECT_NAME})
