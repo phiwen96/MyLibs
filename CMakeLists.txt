@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION  3.17.1)
 # add_subdirectory(cmake/cmake_functions)
 project(cplusplus)
 

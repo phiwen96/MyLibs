@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION 3.17.2)
 project(apps
 VERSION 0.1
   DESCRIPTION "An example project with CMake"

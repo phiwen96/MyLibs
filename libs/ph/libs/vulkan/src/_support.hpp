@@ -2,6 +2,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
 namespace ph::vulkan {
 
 template <class...>
@@ -57,7 +66,7 @@ class __data<T, U...> : public _count<T, U...>
       
       ~__data ();
       
-      operator std::vector<T>();
+      explicit operator std::vector<T>();
       
       
       ////////////////////////////////////////////////////////////////

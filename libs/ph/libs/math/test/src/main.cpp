@@ -143,26 +143,26 @@ struct dim<T, n, m...> {
 
 
 
-template <class... T, size_t... N>
-dim(T (&&...u)[N]) -> dim<common_type_t<T...>, N...>;
+// template <class... T, size_t... N>
+// dim(T (&&...u)[N]) -> dim<common_type_t<T...>, N...>;
 
-template <class... T, size_t... N, size_t... M>
-dim(T (&&...)[N][M]) -> dim<common_type_t<T...>, N..., M...>;
+// template <class... T, size_t... N, size_t... M>
+// dim(T (&&...)[N][M]) -> dim<common_type_t<T...>, N..., M...>;
 
-template <class... T, size_t... N, size_t... M, size_t... O>
-dim(T (&&...)[N][M][O]) -> dim<common_type_t<T...>, N..., M..., O...>;
+// template <class... T, size_t... N, size_t... M, size_t... O>
+// dim(T (&&...)[N][M][O]) -> dim<common_type_t<T...>, N..., M..., O...>;
 
-template <class... T, size_t... N, size_t... M, size_t... O, size_t... P>
-dim(T (&&...)[N][M][O][P]) -> dim<common_type_t<T...>, N..., M..., O..., P...>;
+// template <class... T, size_t... N, size_t... M, size_t... O, size_t... P>
+// dim(T (&&...)[N][M][O][P]) -> dim<common_type_t<T...>, N..., M..., O..., P...>;
 
-template <class... T, size_t... N, size_t... M, size_t... O, size_t... P, size_t... R>
-dim(T (&&...)[N][M][O][P][R]) -> dim<T..., N..., M..., O..., P..., R...>;
+// template <class... T, size_t... N, size_t... M, size_t... O, size_t... P, size_t... R>
+// dim(T (&&...)[N][M][O][P][R]) -> dim<T..., N..., M..., O..., P..., R...>;
 
-template <class... T, size_t... N, size_t... M, size_t... O, size_t... P, size_t... R, size_t... Q>
-dim(T (&&...)[N][M][O][P][R][Q]) -> dim<T..., N..., M..., O..., P..., R..., Q...>;
+// template <class... T, size_t... N, size_t... M, size_t... O, size_t... P, size_t... R, size_t... Q>
+// dim(T (&&...)[N][M][O][P][R][Q]) -> dim<T..., N..., M..., O..., P..., R..., Q...>;
 
-template <class... _T, size_t... A, size_t... B, size_t... C, size_t... D, size_t... E, size_t... F, size_t... G >
-dim(_T (&&...)[A][B][C][D][E][F][G]) -> dim<_T..., A..., B..., C..., D..., E..., F..., G...>;
+// template <class... _T, size_t... A, size_t... B, size_t... C, size_t... D, size_t... E, size_t... F, size_t... G >
+// dim(_T (&&...)[A][B][C][D][E][F][G]) -> dim<_T..., A..., B..., C..., D..., E..., F..., G...>;
 //
 //template <class T, typename = enable_if_t<std::rank_v<T> != 0>>
 //dim(T) -> dim<T, std::rank_v<T>>;
@@ -229,17 +229,17 @@ struct B<n, T> {
       }
 };
 
-template <size_t n, size_t f, class T, class... U>
-struct B<n, T, U...> : B<n+1, U...>{
-      using L = decay_t<T>;
-      constexpr inline static int m_i = n;
-      L t;
+// template <size_t n, size_t f, class T, class... U>
+// struct B<n, T, U...> : B<n+1, U...>{
+//       using L = decay_t<T>;
+//       constexpr inline static int m_i = n;
+//       L t;
       
-      auto operator[](int i) //-> decltype( (i == m_i) ? t : B<n+1, U...>::operator[] (i))
-      {
-            return (i == m_i) ? t : B<n+1, U...>::operator[] (i);
-      }
-};
+//       auto operator[](int i) //-> decltype( (i == m_i) ? t : B<n+1, U...>::operator[] (i))
+//       {
+//             return (i == m_i) ? t : B<n+1, U...>::operator[] (i);
+//       }
+// };
 
 template <size_t n, class T, class... U>
 struct B<n, T, U...> : B<n+1, U...>{
@@ -264,56 +264,56 @@ B(T..., char const(&)[n]) -> B<1, const char*>;
 int main(int argc, char** argv) {
       
       
-      B b0 {1, 2, "hej"};
+//       B b0 {1, 2, "hej"};
       
-//      cout << b0[1] << endl;
-      
-      
-      
-      
-      using T0 = decltype(y{ { 1, 2 }, { 'a', 'b', 'c' },
-            {1.0, 2.0, 3.0, 4.0} });
-      using T1 = y<y<int, int>, y<char, char, char>,
-      y<double, double, double, double>>;
-      
-      static_assert( std::is_same_v<T0, T1> );
-      
-//      dim d11 {{ { 1, 2 }, { 'a', 'b', 'c' }, {1.0, 2.0, 3.0, 4.0} }};
-      
-//      dim d10 = {{1, 2}, {2, 3}};
-      y ii{ { 1, 2 }, { 'a', 'b', 'c' }, { 1, 1, 2 },
-            {1.0, 2.0, 3.0, 4.0} };
-      
-      dim<std::tuple<int,string,double>, 10> d11;
-      
-      dim<int,2,2> d6 {{ {1, 2}, {3, 5} }};
-      dim d9 = {{{{{1, 2}, {3, 5}}}, {{{1, 2}, {3, 5}}}}};
-//      dim d8 = {{{"hej", "kuk", "fitta"}, {9, 8, 7}}};
-      dim d7 = {{1, 2, 3}};
-      dim<int,3> d2 = {{1, 2, 3}};
-      dim<int, 3, 3> d0 = {{{ -7, 2, 3}, { 4, 5, 6}, { 4, 5, 6}}};
-//      B b1 {d2};
-      
-//      dim<int, 3, 3> d1 ( { 1, 2, 3}, { 4, 5, 6}, { 4, 5, 6} );
-//      dim<int, 2, 3> d1 ( { 1, 3}, { 4, 5, 6} );
-//      dim<int, 2, 3> d2 ( { 1, 2, 3, 4}, { 4, 5, 6, 5} );
-      dim<int, 2, 3> d3 { {{ 1, 2, 3}, { 4, 5, 7}} };
-      dim<int, 2, 3, 3> d4 {{ {{ 1, 2, 3}, { 4, 5, 6}}, {{ 1, 2, 3}, { 4, 5, 6}}}};
-      
-      dim<int, 2, 2, 2, 3> d5 {{ {{{ 1, 2, 3}, { 4, 5, 6}}, {{ 1, 2, 3}, { 4, 5, 6}}}, {{{ 1, 2, 3}, { 4, 5, 6}}, {{ 1, 2, 3}, { 4, 5, 6}}} }};
+// //      cout << b0[1] << endl;
       
       
       
       
-      A<int, 2, 3> a5( {{ 1, 2, 3}, { 4, 5, 6}} );
-//      A<int, 2, 3> a5{ { { 1, 2, 3}, { 4, 5, 6} } };
-////      std::cout << a5[1][2] << std::endl;
-//
-//      A<int, 1, 2, 3> a7{ { { { 1, 2, 3}, { 4, 5, 6 } } }};
-//      std::cout << a7[0][1][2] << std::endl;
-//      M<int, 1, 2> m1 ({{1, 2}, {1, 2}});
+//       using T0 = decltype(y{ { 1, 2 }, { 'a', 'b', 'c' },
+//             {1.0, 2.0, 3.0, 4.0} });
+//       using T1 = y<y<int, int>, y<char, char, char>,
+//       y<double, double, double, double>>;
       
-      int i[2][3][3] = {{{1, 2, 3}, {1, 2}}, {{1, 2, 3}, {1, 2}}};
+//       static_assert( std::is_same_v<T0, T1> );
+      
+// //      dim d11 {{ { 1, 2 }, { 'a', 'b', 'c' }, {1.0, 2.0, 3.0, 4.0} }};
+      
+// //      dim d10 = {{1, 2}, {2, 3}};
+//       y ii{ { 1, 2 }, { 'a', 'b', 'c' }, { 1, 1, 2 },
+//             {1.0, 2.0, 3.0, 4.0} };
+      
+//       dim<std::tuple<int,string,double>, 10> d11;
+      
+//       dim<int,2,2> d6 {{ {1, 2}, {3, 5} }};
+//       dim d9 = {{{{{1, 2}, {3, 5}}}, {{{1, 2}, {3, 5}}}}};
+// //      dim d8 = {{{"hej", "kuk", "fitta"}, {9, 8, 7}}};
+//       dim d7 = {{1, 2, 3}};
+//       dim<int,3> d2 = {{1, 2, 3}};
+//       dim<int, 3, 3> d0 = {{{ -7, 2, 3}, { 4, 5, 6}, { 4, 5, 6}}};
+// //      B b1 {d2};
+      
+// //      dim<int, 3, 3> d1 ( { 1, 2, 3}, { 4, 5, 6}, { 4, 5, 6} );
+// //      dim<int, 2, 3> d1 ( { 1, 3}, { 4, 5, 6} );
+// //      dim<int, 2, 3> d2 ( { 1, 2, 3, 4}, { 4, 5, 6, 5} );
+//       dim<int, 2, 3> d3 { {{ 1, 2, 3}, { 4, 5, 7}} };
+//       dim<int, 2, 3, 3> d4 {{ {{ 1, 2, 3}, { 4, 5, 6}}, {{ 1, 2, 3}, { 4, 5, 6}}}};
+      
+//       dim<int, 2, 2, 2, 3> d5 {{ {{{ 1, 2, 3}, { 4, 5, 6}}, {{ 1, 2, 3}, { 4, 5, 6}}}, {{{ 1, 2, 3}, { 4, 5, 6}}, {{ 1, 2, 3}, { 4, 5, 6}}} }};
+      
+      
+      
+      
+//       A<int, 2, 3> a5( {{ 1, 2, 3}, { 4, 5, 6}} );
+// //      A<int, 2, 3> a5{ { { 1, 2, 3}, { 4, 5, 6} } };
+// ////      std::cout << a5[1][2] << std::endl;
+// //
+// //      A<int, 1, 2, 3> a7{ { { { 1, 2, 3}, { 4, 5, 6 } } }};
+// //      std::cout << a7[0][1][2] << std::endl;
+// //      M<int, 1, 2> m1 ({{1, 2}, {1, 2}});
+      
+//       int i[2][3][3] = {{{1, 2, 3}, {1, 2}}, {{1, 2, 3}, {1, 2}}};
 //      dim<int, 2, 3> d1 ( { 1.2, 2.2, 3.3}, { 4.4, 5.3, 6.2} );
       
 //      dim<int, 3>::type d2 {2};

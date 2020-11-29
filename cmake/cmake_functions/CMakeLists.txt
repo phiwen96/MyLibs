@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION 3.17.2)
 project(cmake_functions)
 
 add_subdirectory(functions)

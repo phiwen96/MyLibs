@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION 3.17.2)
 myname(${CMAKE_CURRENT_LIST_DIR} name)
 project(${name} VERSION 1.0)
 
@@ -7,6 +7,7 @@ project(${name} VERSION 1.0)
 
 add_subdirectory(testing)
 
+#set(CMAKE_C_COMPILER "/usr/bin/clang" CACHE string "clang compiler" FORCE)
 
 # file(GLOB_RECURSE LIBS libs/*CMakeLists.txt)
 # foreach(lib ${LIBS})

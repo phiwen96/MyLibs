@@ -41,7 +41,7 @@ struct comes_before<First, Second, T, U...> {
 template <class First, class Second, class... T>
 constexpr bool comes_before_v = comes_before<First, Second, T...>::value;
 
-template <size_t, class...>
+template <size_t t, class...>
 struct index;
 
 template <size_t s, class Find>
@@ -272,32 +272,7 @@ template <class Derived> struct A<Derived, VkApplicationInfo> : B<Derived, VkApp
 /// @brief Info example
 ////////////////////////////////////////////////////////////////
 struct Example {
-      void run ()
-      {
-            Info<VkInstanceCreateInfo, VkApplicationInfo> t1
-            {
-                  {
-                        .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                        .flags = {},
-                        .pApplicationInfo = nullptr,
-                        .enabledLayerCount = 0,
-                        .ppEnabledLayerNames = nullptr,
-                        .enabledExtensionCount = 0,
-                        .ppEnabledExtensionNames = nullptr
-                  },
-                  {
-                        .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                        .pNext = nullptr,
-                        .pApplicationName = "hej",
-                        .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
-                        .pEngineName = "No Engine",
-                        .engineVersion = VK_MAKE_VERSION(1, 0, 0),
-                        .apiVersion = VK_API_VERSION_1_0
-                  }
-                  
-            };
-            VkInstance i = t1;
-      }
+      void run ();
       
 };
 

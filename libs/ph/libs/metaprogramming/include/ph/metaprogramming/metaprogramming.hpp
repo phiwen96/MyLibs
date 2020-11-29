@@ -351,7 +351,7 @@ template <class Iter, class Callable, class... Args>
 void doit (Iter current, Iter end, Callable op, Args const&... args)
 {
       while (current != end) {
-            invoke (op, args..., *current);
+            // invoke (op, args..., *current);
             ++current;
       }
 }

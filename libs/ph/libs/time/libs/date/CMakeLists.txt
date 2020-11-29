@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.4)
+cmake_minimum_required(VERSION 3.17.2)
 myname(${CMAKE_CURRENT_LIST_DIR} name)
 project("ph_time_${name}")
 
